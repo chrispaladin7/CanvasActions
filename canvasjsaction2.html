@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{ margin:0; padding:0; }
+        html, body { width:100%; height:100%; }
+        @media screen and (width=500px) {
+            html, body { width:100%; height:100%; }
+            canvas { display:grid;grid-area: auto; }
+            
+        }
+
+        #canvas{
+            background-color: whitesmoke;
+            fill-opacity:25%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+
+        document.body.addEventListener("touchstart", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+        }, false);
+        document.body.addEventListener("touchend", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+        }, false);
+        document.body.addEventListener("touchmove", function (e) {
+        if (e.target == canvas) {
+            e.preventDefault();
+        }
+        }, false);
+        
+        
+
+    function size(){
+        var canvas=document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+   
+    
+    window.onload=function()
+     {
+        size();
+        draw(1,1,1,"black");
+           
+    }
+    
+  
+
+    if(window.DeviceMotionEvent != undefined){
+        window.ondevicemotion=function(e){
+        
+            redraw(1,1,1,"black"); 
+            
+     
+        }
+        
+    }
+
+    function draw(a,b,c,d){
+        
+            for(let i=0;i<100;i++){
+
+            for(let j=0;j<99;j++){
+                var x= Math.random()*30+i*50+a;
+                var y= Math.random()*20+j*25+b;
+                var r=20*c;
+                var startAngle=Math.random()*-10;
+                var endAngle=Math.PI*2;
+                var canvas=document.getElementById("canvas");
+             let ctx=document.getElementById("canvas").getContext("2d");
+            
+            ctx.strokeStyle = d;
+            ctx.beginPath();
+            ctx.arc(x, y, r, startAngle, endAngle,false);
+        
+            ctx.stroke();
+            }
+            }
+    }
+
+
+       
+
+    function redraw(a,b,c,d){
+        let ctx=document.getElementById("canvas").getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        
+        draw(a,b,c,d);
+        draw(-a,-b,c,d);
+        
+    }
+
+    
+
+    function touchmove(e){
+        var canvas=document.getElementById("canvas");
+            var ctx =canvas.getContext("2d"); 
+     
+        var gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+            gradient.addColorStop("0", "magenta");
+            gradient.addColorStop("0.5" ,"blue");
+            gradient.addColorStop("1.0", "red");
+        
+        for (let i = 0; i <e.touches.length; i++) {    
+       
+            
+            window.requestAnimationFrame(redraw(e.touches[i].pageX ,e.touches[i].pageY,1,gradient));
+          
+        }
+        const b=new Date();
+        var renderTime=d.getTime()-b.getTime();
+        console.log(renderTime);
+  }
+ document.addEventListener('touchmove',touchmove);
+
+
+  window.addEventListener("resize", size());
+</script>
+
+</html>
